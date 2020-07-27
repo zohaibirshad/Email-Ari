@@ -33,12 +33,39 @@
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
+            <ul class="nav-item nav-treeview">
+              <li class="nav-item has-treeview">
                 <a href="insert_e.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Start New Compaign</p>
+        		<i class="right fas fa-angle-left"></i>
                 </a>
+				<ul class="nav nav-treeview">
+					<li class="nav-item">
+						<a href="#" class="nav-link">
+							<i class="far fa-circle nav-icon"></i>
+							<p>Step 1</p>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" class="nav-link disabled">
+							<i class="far fa-circle nav-icon"></i>
+							<p>Step 2</p>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" class="nav-link disabled">
+							<i class="far fa-circle nav-icon"></i>
+							<p>Step 3</p>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" class="nav-link disabled">
+							<i class="far fa-circle nav-icon"></i>
+							<p>Step 4</p>
+						</a>
+					</li>
+				</ul>
               </li>
               <li class="nav-item">
                 <a href="show_e.php" class="nav-link">
