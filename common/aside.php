@@ -42,7 +42,7 @@
                 </a>
 				<ul class="nav nav-treeview">
 					<li class="nav-item">
-						<a href="#" class="nav-link">
+						<a href="insert_e.php" class="nav-link">
 							<i class="far fa-circle nav-icon"></i>
 							<p>Step 1</p>
 						</a>
@@ -89,3 +89,5 @@
     </div>
     <!-- /.sidebar -->
   </aside>
+
+ 

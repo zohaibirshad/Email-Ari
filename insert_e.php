@@ -39,7 +39,7 @@ require_once "common/aside.php";
 				</div>
 				<!-- /.card-header -->
 				<div class="card-body pad">
-              <form role="form" id="insertArtForm" action="" onsubmit="return false" method="post">
+              <form role="form" id="insertArtForm" action="email.php?fun=insert" method="post">
                 <div class="card-body">
 				<div class="row">
 					<div class="col-md-6">
@@ -62,7 +62,7 @@ require_once "common/aside.php";
 					<div class="col-md-6">
 	                  <div class="form-group">
 	                    <label for="InputUserName">Enter Your "From" Email Address:</label>
-	                    <input type="text" class="form-control" id="phne_number" name="phne_number" placeholder="From Email" value="" required>
+	                    <input type="email" class="form-control" id="phne_number" name="phne_number" placeholder="From Email" value="" required>
 	                  </div>
                   	</div>
 					<div class="col-md-6">
@@ -72,20 +72,24 @@ require_once "common/aside.php";
 	                  </div>
                   	</div>
 				</div>
-				<div class="row">
-	              <div class="col-md-12">
-	                  <div class="form-group">
-	                    <label for="address">Address</label>
-	               		 <textarea class="textarea" placeholder="Place some text here"
-	                          style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-	                  </div>
-	              </div>
-				</div>
+				<ol>
+				
+				<?php 
+				for($i=1 ; $i<=25; $i++)
+				{
+				?>
+				<li>
+					<input type="checkbox" id="email_letter<?php echo $i ?>" onchange="getCount(<?php echo $i ?>)" name="email_letter<?php echo $i ?>" value="<?php echo $i ?>">
+					<a href="view_email.php?sr_no=<?php echo $i ?>" target="_blank">View Email</a>
+					</li>
+				<?php } ?>
+
+					</ol>
                 </div>
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary" style="float: right;">Submit Compaign</button>
+                  <button id="validate" class="btn btn-primary" style="float: right;">Submit Compaign</button>
                 </div>
               </form>
 			</div>
@@ -105,7 +109,52 @@ require_once "common/aside.php";
   $(function () {
     // Summernote
     $('.textarea').summernote()
-  })
+  });
+
+//   $("#validate").click(function () {
+//   console.log(($("#emails").val().match(/,/g)||[]).length < 5)
+// });
+
+$("#emails").keyup(function(){
+    if(($("#emails").val().match(/,/g)||[]).length >=100 )
+	{
+	$('#emails').bind('keypress', function(e) {
+    e.preventDefault(); 
+});
+	}else{
+		$('#emails').unbind('keypress');
+	}
+
+});
+
+var count = 0;
+
+function getCount(id)
+{
+	if($('#email_letter'+id).prop("checked") == true)
+	{
+                console.log("Checkbox is checked.");
+				count++;
+	}
+
+	else if($('#email_letter'+id).prop("checked") == false)
+	{
+		console.log("Checkbox is unChecked.");
+		count--;
+	}
+
+	console.log(count);
+
+		if(count > 4)
+				{
+					alert("maximum 10 Email letters can be seleted");
+					count--;
+					$('#email_letter'+id).prop("checked", false);
+				}
+
+}
+
+
 </script>
 
 
