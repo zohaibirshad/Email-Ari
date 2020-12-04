@@ -1,164 +1,205 @@
 <?php
-// echo base_url();return;
-
 require_once "common/header.php";
 require_once "common/aside.php";
+
+
+require_once "config/connection.php";
+require_once "config/config.php";
+
+$conn = new Database(DB_SERVER, DB_USER, DB_PASS, DB_DATABASE);
+$link = $conn->connect();
+
+
+
+	$qry = "select * from campaign where is_completed=0 and in_progress=1";
+
+    $res = mysqli_query($link, $qry);
+
+
+    $qry1 = "select * from campaign where is_completed=1 and in_progress=0";
+
+    $res1 = mysqli_query($link, $qry1);
+
+
+
+
 ?>
+<style type="text/css">
 
+.wrap{
+white-space: nowrap;
+}
+</style>
 
-  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Dashboard v2</h1>
+            <h1 class="m-0 text-dark">ARI</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v2</li>
+              <li class="breadcrumb-item active">Show Campaign </li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <!-- Info boxes -->
-        <div class="row">
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
+        <!-- SELECT2 EXAMPLE -->
+  <!--               <button type="button" class="btn btn-success swalDefaultSuccess">
+                  Launch Success Toast
+                </button> -->
+        <div class="card card-default">
+          <div class="card-header">
+            <h3 class="card-title">Show Compaign Currently Running</h3>
 
-              <div class="info-box-content">
-                <span class="info-box-text">CPU Traffic</span>
-                <span class="info-box-number">
-                  10
-                  <small>%</small>
-                </span>
-              </div>
-              <!-- /.info-box-content -->
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+              <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-remove"></i></button>
             </div>
-            <!-- /.info-box -->
           </div>
-          <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
+          <!-- /.card-header -->
+          <div class="card-body">
+              <table id="example2" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th class="wrap">Item No:</th>
+                  <th class="wrap">from</th>
+                  <th class="wrap">Compaign Title</th>
+                  <th class="wrap">Start Date</th>
+                  <th class="wrap">End Date</th>
+                  <th class="wrap">Email Letters</th>
+                  <th classwrap>Days</th>
+                  <th style='width: 20%;'>Status</th>
+                  <th class="wrap">Action</th>
+ 
+                </tr>
+                </thead>
+                <tbody id="data1">
+				<?php $i=1; while($row = mysqli_fetch_assoc($res)){ ?>
+        	<tr>
+						<td><?php echo $i ?></td>
+						<td><?php echo $row['from_email_address'] ?></td>
+						<td><?php echo $row['name'] ?></td>
+						<td><?php echo $row['start_date'] ?></td>
+						<td><?php echo $row['end_date'] ?></td>
+            <td><?php echo count(explode(",",$row['completed_email_letters']))."/".count(explode(",",$row['email_letters'])) ?></td>
 
-              <div class="info-box-content">
-                <span class="info-box-text">Likes</span>
-                <span class="info-box-number">41,410</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
+<td>
+<?php 
+$now = time('Y-m-d'); // or your date as well
+$your_date = strtotime($row['end_date']);
+$datediff =$your_date - $now;
+
+
+$day = round($datediff / (60 * 60 * 24));
+
+
+if($day < 0)
+{
+  $day = -1 * $day;
+}
+
+if($day < 10)
+{
+  echo $day."/10";
+}else{
+  echo "10/10";
+
+}
+
+?>
+</td>
+
+						<td>In Progress</td>
+
+            <td>
+            <a href="javascript0:" onclick="delete_cmp(<?php echo $row['id'] ?>);">Delete<a/>
+            </td>
+
+					</tr>
+        <?php $i++; } ?>
+				</tbody>
+				<tfoot>
+                  <th>Item No:</th>
+                  <th>To</th>
+                  <th>Compaign Title</th>
+                  <th>Subject</th>
+                  <th>Body</th>
+                   <th class="wrap">Email Letters</th>
+                  <th>Status</th>
+                  <th style='width: 20%;'>Status</th>
+                  <th class="wrap">Action</th>
+ 
+                </tfoot>
+              </table>
           </div>
-          <!-- /.col -->
-
-          <!-- fix for small devices only -->
-          <div class="clearfix hidden-md-up"></div>
-
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">Sales</span>
-                <span class="info-box-number">760</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
+          <!-- /.card-body -->
+          <div class="card-footer">
+            
           </div>
-          <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">New Members</span>
-                <span class="info-box-number">2,000</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
         </div>
-        <!-- /.row -->
+        <!-- /.card -->
+      </div><!-- /.container-fluid -->
+      
 
-        <!-- Main row -->
-        <div class="row">
-          <!-- Left col -->
-          <div class="col-md-8">
-            <!-- MAP & BOX PANE -->
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
 
-          <div class="col-md-4">
-            <!-- Info Boxes Style 2 -->
-            <div class="info-box mb-3 bg-warning">
-              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
 
-              <div class="info-box-content">
-                <span class="info-box-text">Inventory</span>
-                <span class="info-box-number">5,200</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-            <div class="info-box mb-3 bg-success">
-              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">Mentions</span>
-                <span class="info-box-number">92,050</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-            <div class="info-box mb-3 bg-danger">
-              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">Downloads</span>
-                <span class="info-box-number">114,381</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-            <div class="info-box mb-3 bg-info">
-              <span class="info-box-icon"><i class="far fa-comment"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">Direct Messages</span>
-                <span class="info-box-number">163,921</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-      </div><!--/. container-fluid -->
     </section>
     <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
+	</div>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
+
+
+
+
+     
+      <!-- /.modal -->
 
 <?php require_once "common/footer.php";?>
+
+<script>
+
+  $(function () {
+    $('#example2').DataTable({
+    });
+  });
+
+
+  $(function () {
+    $('#example3').DataTable({
+    });
+  });
+
+  
+  function delete_cmp(id)
+  {
+    // alert();
+    var result = window.confirm('Are you sure you want to Delete Campaign?');
+    if (result == false) {
+        event.preventDefault();
+    } else {
+  
+            $.ajax({
+                type: 'Post',
+                data: {'id': id},
+                url: 'delete_campaign.php',
+                success: function (response) {
+                    // $('#example2').dataTable().fnDestroy();
+                    // $('#data1').empty();
+                    // $('#data1').html(response);
+                    // $('#example2').DataTable();
+                    location.reload();
+                              },
+            });
+          }         
+  }
+
+</script>
